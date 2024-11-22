@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgres-statefulset
+spec:
+  selector:
+    matchLabels:
+      app: postgres
+  serviceName: "postgres-service"
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:bullseye
+          ports:
+            - containerPort: 5432
+          volumeMounts:
+            - name: volume
+              mountPath: /var/lib/postgresql/data
+              subPath: pgdata
+          env:
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: beeapps
+                  key: dbUser
+                  optional: false
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: beeapps
+                  key: dbPassword
+                  optional: false
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
+      volumes:
+        - name: volume
+          persistentVolumeClaim:
+            claimName: postgres-pvc

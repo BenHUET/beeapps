@@ -1,0 +1,32 @@
+<div class="{{cssClasses}}">
+  <div class="input-group">
+    <div class="input-group-prepend">
+      <span class="input-group-text">{{icon}}</span>
+    </div>
+    <input
+      [formControl]="control"
+      type="{{type}}"
+      class="form-control"
+      placeholder="{{placeholder}}"
+      [ngClass]="control.invalid && control.touched ? 'is-invalid' : ''"
+    />
+  </div>
+  <div class="text-end">
+    <div *ngIf="control.touched && control.hasError('required')" class="text-danger small">required</div>
+    <div *ngIf="control.touched && control.hasError('minlength')" class="text-danger small">too short</div>
+    <div *ngIf="control.touched && control.hasError('maxlength')" class="text-danger small">too long</div>
+    <div *ngIf="control.touched && control.hasError('email')" class="text-danger small">must be valid email</div>
+    <div *ngIf="control.touched && control.hasError('minNumber')" class="text-danger small">
+      must contain at least {{control.errors!['minNumber'].expected}} number{{control.errors!['minNumber'].expected > 1 ? 's' : ''}}
+    </div>
+    <div *ngIf="control.touched && control.hasError('minSpecialChar')" class="text-danger small">
+      must contain at least {{control.errors!['minSpecialChar'].expected}} special character{{control.errors!['minSpecialChar'].expected > 1 ? 's' : ''}}
+    </div>
+    <div *ngIf="control.touched && control.hasError('minLetter')" class="text-danger small">
+      must contain at least {{control.errors!['minLetter'].expected}} letter{{control.errors!['minLetter'].expected > 1 ? 's' : ''}}
+    </div>
+    <div *ngIf="control.touched && control.hasError('alphanumeric')" class="text-danger small">must contain alphanumeric characters only</div>
+    <div *ngIf="control.touched && control.hasError('identical')" class="text-danger small">must match</div>
+    <div *ngIf="control.touched && control.hasError('passwordInvalidCharacters')" class="text-danger small">has invalid characters</div>
+  </div>
+</div>

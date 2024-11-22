@@ -1,0 +1,5 @@
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+ARG APP_NAME
+ENV NAME=$APP_NAME
+WORKDIR /app
+ENTRYPOINT dotnet watch run --urls http://0.0.0.0:80 --project $NAME

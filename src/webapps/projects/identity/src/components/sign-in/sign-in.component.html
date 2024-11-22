@@ -1,0 +1,49 @@
+<div class="row justify-content-center">
+  <div class="col-lg-2">
+    <form [formGroup]="signinForm" (ngSubmit)="onSubmit()">
+
+      <h3 class="w-100 text-center mb-3">sign-in</h3>
+
+      <ngb-alert type="danger" [dismissible]="false" *ngIf="error && !mailSent" class="text-center">
+        <span *ngIf="error.status !== 403">{{error.message}}</span>
+        <div *ngIf="error.status === 403">
+          email not confirmed, check your mailbox
+          <br/>
+          <a href="javascript:void(0)" *ngIf="!mailSent" (click)="resendEmail()">send a new link</a>
+        </div>
+      </ngb-alert>
+
+      <ngb-alert type="success" [dismissible]="false" *ngIf="mailSent && !error" class="text-center">
+        new confirmation email sent
+      </ngb-alert>
+
+      <input-group
+        [control]="signinForm.controls.email"
+        icon="@"
+        type="text"
+        placeholder="123@example.com"
+        cssClasses="mb-3"
+      />
+
+      <input-group
+        [control]="signinForm.controls.password"
+        icon="#"
+        type="password"
+        placeholder="password"
+        cssClasses="mb-3"
+      />
+
+      <button
+        type="submit"
+        class="btn btn-primary w-100"
+        [disabled]="!signinForm.valid || isWaiting">
+        <span *ngIf="!isWaiting">submit</span>
+        <span *ngIf="isWaiting" class="spinner-grow spinner-grow-sm ms-3" role="status"></span>
+      </button>
+
+      <a routerLink="/sign-up">sign-up</a>
+      <a class="float-end" routerLink="/sign-up">password recovery</a>
+
+    </form>
+  </div>
+</div>

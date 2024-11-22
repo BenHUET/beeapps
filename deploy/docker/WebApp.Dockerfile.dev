@@ -1,0 +1,16 @@
+FROM node:lts-alpine
+
+ARG APP_NAME
+ARG APP_PORT
+
+ENV NAME=$APP_NAME
+ENV PORT=$APP_PORT
+ENV PATH /app/node_modules/.bin:$PATH
+
+WORKDIR /app
+COPY ./src/webapps/package.json ./
+COPY ./src/webapps/package-lock.json ./
+RUN npm install -g @angular/cli
+RUN npm install
+
+CMD ng serve --project=$NAME --port $PORT --host 0.0.0.0 --disable-host-check --poll=1000 --live-reload

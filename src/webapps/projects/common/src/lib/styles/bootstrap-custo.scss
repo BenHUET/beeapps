@@ -1,0 +1,39 @@
+@import "beeapps-variables";
+
+// Global
+$enable-rounded: true;
+$border-radius: 0.2rem;
+
+// Body
+$body-bg: $beeapps-bg;
+$body-color: $beeapps-body-color;
+
+// Fonts
+@import url(//fonts.googleapis.com/css?family=Roboto);
+@import url(//fonts.googleapis.com/css?family=Roboto+Mono);
+$font-family-sans-serif: Roboto, -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+$font-family-monospace: "Roboto Mono", SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+
+// Navbar
+$navbar-dark-brand-color: $beeapps-yellow;
+$navbar-dark-brand-hover-color: white;
+.navbar-brand {
+  font-family: $font-family-monospace;
+}
+
+.navbar {
+  background-color: $beeapps-bg-alt;
+  border-bottom: 1px solid $beeapps-yellow;
+}
+
+// Cards
+$card-bg: $beeapps-bg-alt;
+
+// Forms
+$input-group-addon-bg: $beeapps-body-color;
+$input-group-addon-color: $beeapps-bg;
+.input-group-text {
+  font-family: $font-family-monospace;
+}
+
+@import "node_modules/bootstrap/scss/bootstrap";

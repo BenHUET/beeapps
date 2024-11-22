@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: identity-deployment
+  labels:
+    app: identity
+spec:
+  selector:
+    matchLabels:
+      app: identity
+  template:
+    metadata:
+      labels:
+        app: identity
+    spec:
+      containers:
+        - name: identity-deployment
+          image: beeapps.azurecr.io/identity.webapi:v2
+          ports:
+            - containerPort: 80
+          env:
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: beeapps
+                  key: dbUser
+                  optional: false
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: beeapps
+                  key: dbPassword
+                  optional: false
+            - name: DB_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: beeapps
+                  key: dbHost
+                  optional: false
+            - name: DB_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: beeapps
+                  key: dbName
+                  optional: false
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: beeapps
+                  key: jwtSecret
+                  optional: false
+            - name: JWT_ACCESS_LIFETIME
+              valueFrom:
+                secretKeyRef:
+                  name: beeapps
+                  key: jwtAccessLifetime
+                  optional: false
+            - name: JWT_REFRESH_LIFETIME
+              valueFrom:
+                secretKeyRef:
+                  name: beeapps
+                  key: jwtRefreshLifetime
+                  optional: false
+      imagePullSecrets:
+        - name: beeapps-secret-azurecr

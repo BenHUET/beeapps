@@ -1,0 +1,124 @@
+version: '3.8'
+
+services:
+  postgres:
+    container_name: postgres_container
+    image: postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
+      PGDATA: /data/postgres
+    volumes:
+      - postgres:/data/postgres
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+  
+  pgadmin:
+    container_name: pgadmin_container
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+    ports:
+      - "${PGADMIN_PORT:-5050}:80"
+    restart: unless-stopped
+    
+  beeapps.master.webapp:
+    container_name: "master_webapp"
+    image: beeapps.master.webapp
+    build:
+      context: ../..
+      dockerfile: ./deploy/docker/WebApp.Dockerfile.dev
+      args:
+        - "APP_NAME=master"
+        - "APP_PORT=53965"
+    ports:
+      - "53965:53965"
+    volumes:
+      - ../../src/webapps/:/app/
+    restart: always
+  
+  beeapps.identity.webapi:
+    container_name: "identity_webapi"
+    image: beeapps.identity.webapi
+    build:
+      context: ../..
+      dockerfile: ./deploy/docker/WebAPI.Dockerfile.dev
+      args:
+        - "APP_NAME=BeeApps.Identity.WebAPI"
+    ports:
+      - "53961:80"
+    volumes:
+      - ../../src/webapis/BeeApps.Common.WebAPI:/app/BeeApps.Common.WebAPI
+      - ../../src/webapis/BeeApps.Identity.WebAPI:/app/BeeApps.Identity.WebAPI
+    env_file:
+      - Identity.WebAPI.env.local
+      - .secrets
+    restart: always
+    depends_on:
+      - postgres
+        
+  beeapps.identity.webapp:
+    container_name: "identity_webapp"
+    image: beeapps.identity.webapp
+    build:
+      context: ../..
+      dockerfile: ./deploy/docker/WebApp.Dockerfile.dev
+      args:
+        - "APP_NAME=identity"
+        - "APP_PORT=53966"
+    ports:
+      - "53966:53966"
+    volumes:
+      - ../../src/webapps/:/app/
+    restart: always
+  
+  beeapps.tags.webapi:
+    container_name: "tags_webapi"
+    image: beeapps.tags.webapi
+    build:
+      context: ../..
+      dockerfile: ./deploy/docker/WebAPI.Dockerfile.dev
+      args:
+        - "APP_NAME=BeeApps.Tags.WebAPI"
+    ports:
+      - "53962:80"
+    volumes:
+      - ../../src/webapis/BeeApps.Common.WebAPI:/app/BeeApps.Common.WebAPI
+      - ../../src/webapis/BeeApps.Tags.WebAPI:/app/BeeApps.Tags.WebAPI
+    env_file:
+      - Tags.WebAPI.env.local
+      - .secrets
+    restart: always
+    depends_on:
+      - beeapps.identity.webapi
+      - postgres
+        
+  beeapps.wallet.webapi:
+    container_name: "wallet_webapi"
+    image: beeapps.wallet.webapi
+    build:
+      context: ../..
+      dockerfile: ./deploy/docker/WebAPI.Dockerfile.dev
+      args:
+        - "APP_NAME=BeeApps.Wallet.WebAPI"
+    ports:
+      - "53964:80"
+    volumes:
+      - ../../src/webapis/BeeApps.Common.WebAPI:/app/BeeApps.Common.WebAPI
+      - ../../src/webapis/BeeApps.Wallet.WebAPI:/app/BeeApps.Wallet.WebAPI
+    env_file:
+      - Wallet.WebAPI.env.local
+      - .secrets
+    restart: always
+    depends_on:
+      - beeapps.identity.webapi
+      - postgres
+
+volumes:
+  postgres:
+  pgadmin:

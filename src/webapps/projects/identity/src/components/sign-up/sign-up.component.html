@@ -1,0 +1,65 @@
+<div class="row justify-content-center">
+  <div class="col-lg-2">
+    <form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+
+      <h3 class="w-100 text-center mb-3">sign-up</h3>
+
+      <ngb-alert type="danger" [dismissible]="false" *ngIf="error" class="text-center">
+        {{error}}
+      </ngb-alert>
+
+      <input-group
+        [control]="signupForm.controls.username"
+        icon="~"
+        type="text"
+        placeholder="username"
+        cssClasses="mb-3"
+      />
+
+      <input-group
+        [control]="signupForm.controls.email"
+        icon="@"
+        type="text"
+        placeholder="123@example.com"
+        cssClasses="mb-2"
+        (change)="signupForm.controls['emailConfirmation'].updateValueAndValidity();"
+      />
+
+      <input-group
+        [control]="signupForm.controls.emailConfirmation"
+        icon="@"
+        type="text"
+        placeholder="email confirmation"
+        cssClasses="mb-3"
+      />
+
+      <input-group
+        [control]="signupForm.controls.password"
+        icon="#"
+        type="password"
+        placeholder="password"
+        cssClasses="mb-2"
+        (change)="signupForm.controls['passwordConfirmation'].updateValueAndValidity();"
+      />
+
+      <input-group
+        [control]="signupForm.controls.passwordConfirmation"
+        icon="#"
+        type="password"
+        placeholder="password confirmation"
+        cssClasses="mb-3"
+      />
+
+      <button
+        type="submit"
+        class="btn btn-primary w-100"
+        [disabled]="!signupForm.valid || isWaiting">
+        <span *ngIf="!isWaiting">submit</span>
+        <span *ngIf="isWaiting" class="spinner-grow spinner-grow-sm ms-3" role="status"></span>
+      </button>
+
+      <a routerLink="/sign-in">sign-in</a>
+
+    </form>
+  </div>
+</div>

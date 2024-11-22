@@ -1,0 +1,19 @@
+<div class="row justify-content-center">
+  <div class="col-lg-2">
+
+      <h3 class="w-100 text-center mb-3">email validation</h3>
+
+      <div *ngIf="isWaiting" class="text-center">
+        validating <span class="spinner-grow spinner-grow-sm ms-3" role="status"></span>
+      </div>
+
+      <div *ngIf="!isWaiting && !error" class="text-center">
+        done, you can now <a routerLink="/sign-in">sign-in</a>
+      </div>
+
+      <ngb-alert type="danger" [dismissible]="false" *ngIf="!isWaiting && error" class="text-center">
+        {{error}}
+      </ngb-alert>
+
+  </div>
+</div>
